@@ -14,9 +14,17 @@ class Color(Enum):
     color4 = 'green'
 
 class TableName(Enum):
-    table1 = 'up_table'
+    table1 = 'submit_bug_of_this_week'
     table2 = 'rest_bug_of_this_week'
     table3 = 'rest_bug_of_last_week'
+
+class RGB(Enum):
+    color1 = '#E0EEEE'
+    color2 = '#EE9A00'
+
+class TableHead(Enum):
+    column = ['AND', 'IOS', 'H5', 'SER', 'PRO']
+    row = ['Bloker', 'Critical', 'Major', 'Minor']
 
 if __name__ == '__main__':
     print(TableName['sub_table'].value)

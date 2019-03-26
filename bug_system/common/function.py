@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from common.mysqler import SQL
-
+from common.config import TableHead
 class Common:
     @classmethod
     def get_table_data(cls, table):
@@ -21,12 +21,18 @@ class Common:
         :return: ['bug_id', 'AND', 'IOS', 'H5', 'SER', 'PRO']
         """
         data = SQL.select_column(table)
-        return [item[0] for item in data]
+        columns = [item[0] for item in data]
+        if 'BUG' in columns:
+            columns.remove('BUG')
+        return columns
 
+    @classmethod
+    def update_table_value(cls, table, x, y, value):
 
-
-
+        key = TableHead.column.value[y]
+        bug = TableHead.row.value[x]
+        SQL.update_value(table, key, value, bug)
 
 if __name__ == '__main__':
-    a = Common.get_table_data('up_table')
+    a = Common.update_table_value('submit_bug_of_this_week', 2, 3, 10)
     print(a)

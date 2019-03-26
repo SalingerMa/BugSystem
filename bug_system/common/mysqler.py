@@ -23,6 +23,13 @@ class SQL:
         cursor.execute(sql, table)
         return cursor.fetchall()
 
+    @classmethod
+    def update_value(cls, table, key, value, bug):
+        sql = "UPDATE `%s` SET `%s`=%s WHERE `BUG`='%s'" % (table, key, value, bug)
+        cursor.execute(sql)
+        db.commit()
+        return cursor.fetchall()
+
 if __name__ == '__main__':
-    a = SQL.select_column('up_table')
+    a = SQL.update_value('submit_bug_of_this_week', 'AND', 10, 'Major')
     print(a)
