@@ -12,26 +12,42 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
         self.init_table(table_obj=self.submit_table, table_name=TableName.table1.value)
+        self.init_table(table_obj=self.rest_table, table_name=TableName.table2.value)
+        self.init_table(table_obj=self.old_rest_table, table_name=TableName.table3.value)
 
         self.submit_table.cellChanged.connect(self.on_table_show)
+        self.refresh_button.clicked.connect(self.on_table_refresh)
+
+    def insert_value(self, table_obj, x, y, value):
+
+        sum_all = QtWidgets.QTableWidgetItem(str(value))
+        sum_all.setBackground(QColor(RGB.color2.value))
+        sum_all.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        table_obj.setItem(x, y, sum_all)
+
+    def calculator_all(self, table_obj, col_, row_):
+        col_ = int(col_)
+        row_ = int(row_)
+        for j in range(row_ - 1):
+            item = 0
+            for i in range(col_):
+                if i == col_ - 1:
+                    self.insert_value(table_obj, j, i, item)
+                else:
+                    item += int(table_obj.item(j, i).text())
+        for n in range(col_):
+            item = 0
+            for m in range(row_):
+                if m == row_ - 1:
+                    self.insert_value(table_obj, m, n, item)
+                else:
+                    item += int(table_obj.item(m, n).text())
 
     def init_table(self, table_obj, table_name):
-        table_data = Common.get_table_data(table_name)
-
-        columns = Common.get_table_column(table_name)
-        rows = []
-        cols_all = [0, 0, 0, 0, 0]
-        rows_all = []
-        for key, value in table_data.items():
-            rows.append(key)
-            rows_all.append(sum(value))
-            for i in range(len(cols_all)):
-                cols_all[i] += value[i]
-        bug_all = sum(rows_all) + sum(cols_all)
-
+        columns = TableHead.column.value
+        rows = TableHead.row.value
         columns.append('ALL')
         rows.append('ALL')
-
         col_count = len(columns)
         row_count = len(rows)
 
@@ -40,6 +56,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         table_obj.setHorizontalHeaderLabels(columns)
         table_obj.setVerticalHeaderLabels(rows)
 
+        table_data = Common.get_table_data(table_name)
+        cell_data = 0
         for i in range(row_count - 1):
             for j in range(col_count - 1):
                 if i == 0:
@@ -50,54 +68,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     cell_data = table_data[Name.grade3.value][j]
                 elif i == 3:
                     cell_data = table_data[Name.grade4.value][j]
-                else:
-                    cell_data = 0
+
                 item = QtWidgets.QTableWidgetItem(str(cell_data))
 
                 item.setBackground(QColor(RGB.color1.value))
                 item.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                 table_obj.setItem(i, j, item)
 
-        for i in range(len(cols_all)):
-            cell_data = cols_all[i]
-            item = QtWidgets.QTableWidgetItem(str(cell_data))
+        # self.calculator_all(table_obj, col_count, row_count)
 
-            item.setBackground(QColor(RGB.color2.value))
-            item.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-            table_obj.setItem(4, i, item)
-            item.setFlags(
-                QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsUserCheckable)
-
-        for j in range(len(rows_all)):
-            cell_data = rows_all[j]
-            item = QtWidgets.QTableWidgetItem(str(cell_data))
-
-            item.setBackground(QColor(RGB.color2.value))
-            item.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-            table_obj.setItem(j, 5, item)
-            item.setFlags(
-                QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsUserCheckable)
-
-        item = QtWidgets.QTableWidgetItem(str(bug_all))
-        item.setBackground(QColor(RGB.color2.value))
-        item.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        table_obj.setItem(4, 5, item)
-        item.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsDragEnabled | QtCore.Qt.ItemIsUserCheckable)
 
     def on_table_show(self, p_int, p_int_1):
-        # print(p_int, p_int_1)
         item = self.submit_table.item(p_int, p_int_1).text()
-        # print(item)
         Common.update_table_value(TableName.table1.value, p_int, p_int_1, item)
-        self.refresh_sum_all(self.submit_table)
-    def refresh_sum_all(self, table_obj):
-        rows_all = []
-        row_sum = 0
-        for i in range(len(TableHead.column.value)):
-            item = table_obj.item(0, i).text()
-
-
-
+        # self.calculator_all(self.submit_table, self.submit_table.columnCount(), self.submit_table.rowCount())
+        self.init_table(self.submit_table, TableName.table1.value)
+    def on_table_refresh(self):
+        self.calculator_all(self.submit_table, self.submit_table.columnCount(), self.submit_table.rowCount())
 
     # def onChinaClicked(self):
     #     self.Title.setText("Hello China")

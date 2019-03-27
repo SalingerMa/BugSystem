@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pymysql
-
+from pymysql.err import ProgrammingError, InternalError
 db_host = 'localhost'
 db_user = 'root'
 db_pwd = '123456'
@@ -29,7 +29,35 @@ class SQL:
         cursor.execute(sql)
         db.commit()
         return cursor.fetchall()
+    @classmethod
+    def insert_one(cls, table, data, duplicate_update=False):
+        """
+        插入一组数据
+        :param table: 表名
+        :param data: 插入的数据（以字典的形式传入）
+        :param duplicate_update: 是否查重更新：若主键重复，则将插入数据变为更新数据
+        :return: 空
+        """
+        key = ', '.join(data.keys())
+        value = ', '.join(['%s'] * len(data.keys()))
+
+        sql = "INSERT INTO {table}({key}) VALUES({value})".format(table=table, key=key, value=value)
+        sql_value = tuple(data.values())
+
+        if duplicate_update:
+            update = ', '.join(['{}=%s'.format(i) for i in data.keys()])
+            sql += ' ON DUPLICATE KEY UPDATE {update}'.format(update=update)
+            sql_value = sql_value * 2
+        try:
+            cursor.execute(sql, sql_value)
+            db.commit()
+        except (ProgrammingError, InternalError) as e:
+            print("插入数据错误:", e)
+            return None
+
+
+
 
 if __name__ == '__main__':
-    a = SQL.update_value('submit_bug_of_this_week', 'AND', 10, 'Major')
+    a = SQL.insert_one('submit_bug_of_this_week', {'KG':2, "MIN": 3}, duplicate_update=True)
     print(a)

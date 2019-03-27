@@ -23,8 +23,10 @@ class RGB(Enum):
     color2 = '#EE9A00'
 
 class TableHead(Enum):
-    column = ['AND', 'IOS', 'H5', 'SER', 'PRO']
+    column = ['BUG', 'AND', 'IOS', 'H5', 'SER', 'PRO', 'ALL']
     row = ['Bloker', 'Critical', 'Major', 'Minor']
+
+
 
 if __name__ == '__main__':
     print(TableName['sub_table'].value)

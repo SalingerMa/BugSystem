@@ -3,16 +3,13 @@ from common.mysqler import SQL
 from common.config import TableHead
 class Common:
     @classmethod
-    def get_table_data(cls, table):
+    def get_table_data(cls, tableName):
         """
         :param table:
         :return:{'Minor': [3, 0, 4, 1, 0], 'Bloker': [2, 10, 2, 1, 0], 'Major': [0, 15, 6, 0, 3], 'Critical': [3, 2, 1, 0, 3]}
         """
-        data = SQL.select(table)
-        table_data = {}
-        for item in data:
-            table_data[item[0]] = list(item[1:])
-        return table_data
+        data = SQL.select(tableName)
+        return [list(item) for item in data]
 
     @classmethod
     def get_table_column(cls, table):
@@ -34,5 +31,5 @@ class Common:
         SQL.update_value(table, key, value, bug)
 
 if __name__ == '__main__':
-    a = Common.update_table_value('submit_bug_of_this_week', 2, 3, 10)
+    a = Common.get_table_data('submit_bug_of_this_week')
     print(a)

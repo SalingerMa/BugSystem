@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1158</width>
-    <height>837</height>
+    <height>841</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,55 +17,54 @@
    <widget class="QTableWidget" name="submit_table">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>21</y>
-      <width>971</width>
-      <height>661</height>
+      <x>20</x>
+      <y>40</y>
+      <width>611</width>
+      <height>221</height>
      </rect>
     </property>
-    <row>
-     <property name="text">
-      <string>r1</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>r2</string>
-     </property>
-    </row>
-    <column>
-     <property name="text">
-      <string>A</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>B</string>
-     </property>
-    </column>
-    <item row="0" column="0">
-     <property name="text">
-      <string>fjfd</string>
-     </property>
-    </item>
-    <item row="0" column="1">
-     <property name="text">
-      <string>dfdsa</string>
-     </property>
-    </item>
-    <item row="1" column="0">
-     <property name="text">
-      <string>dfag</string>
-     </property>
-     <property name="flags">
-      <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsUserCheckable</set>
-     </property>
-    </item>
-    <item row="1" column="1">
-     <property name="text">
-      <string>dfasdf</string>
-     </property>
-    </item>
+    <attribute name="horizontalHeaderDefaultSectionSize">
+     <number>70</number>
+    </attribute>
+   </widget>
+   <widget class="QTableWidget" name="rest_table">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>300</y>
+      <width>611</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <attribute name="horizontalHeaderDefaultSectionSize">
+     <number>70</number>
+    </attribute>
+   </widget>
+   <widget class="QTableWidget" name="old_rest_table">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>570</y>
+      <width>611</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <attribute name="horizontalHeaderDefaultSectionSize">
+     <number>70</number>
+    </attribute>
+   </widget>
+   <widget class="QPushButton" name="refresh_button">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>50</y>
+      <width>71</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>refresh</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
