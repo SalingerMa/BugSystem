@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from tkinter import Tk, Label as LB
+from tkinter import Tk, Canvas
 from tkinter.ttk import Treeview, Frame, Label, Combobox, Button
 
 window = Tk()
@@ -19,7 +19,7 @@ label3 = Label(table_frame)
 
 barImageChosen = Combobox(bar_frame)
 barImageButton = Button(bar_frame)
-barLabel = LB(bar_frame)
+barcanves = Canvas()
 
 
 

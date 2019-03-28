@@ -26,7 +26,17 @@ class TableHead(Enum):
     column = ['BUG', 'AND', 'IOS', 'H5', 'SER', 'PRO', 'ALL']
     row = ['Bloker', 'Critical', 'Major', 'Minor', 'ALL']
 
-
+class ImageName(Enum):
+    imglist = [
+        '[Bar-Table]submit_bug_of_this_week',
+        '[Bar-Table]rest_bug_of_this_week',
+        '[Bar-Table]rest_bug_of_last_week',
+        '[Pie-Table]submit_bug_of_this_week',
+        '[Pie-Table]rest_bug_of_this_week',
+        '[Pie-Table]rest_bug_of_last_week',
+    ]
+    img_key1 = 'Bar-Table'
+    img_key2 = 'Pie-Table'
 
 if __name__ == '__main__':
     print(TableName['sub_table'].value)

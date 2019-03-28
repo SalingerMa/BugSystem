@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from gui_tkinter import *
 from gui_tkinter.create_table import Table
-from common.config import TableName, TableHead
+from common.config import TableName, TableHead, ImageName
 from tkinter.ttk import Button
 from tkinter import Text, StringVar
 from gui_tkinter.gui_func import GUI_Func
 import os
 from image.image import Image
-from PIL import Image as IMG, ImageTk as ImgTK
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 columns = TableHead.column.value
 base_path = str(os.getcwd()).replace('\\', '/') + '/images'
@@ -16,7 +16,6 @@ class GUI_Table:
         self.t1 = Table(table1)
         self.t2 = Table(table2)
         self.t3 = Table(table3)
-        self.bar = barLabel
         self.barChosen = StringVar()
 
     def label1(self):
@@ -52,7 +51,7 @@ class GUI_Table:
         entryedit = Text(table_frame, width=20, height=1)
         entryedit.grid(column=1, row=0, sticky='E', padx=8, pady=4)
 
-        okb = Button(table_frame, text='OK', width=4, command=lambda: self.saveedit(item, column, entryedit, okb, cn, rn))
+        okb = Button(table_frame, text='OK', width=4, command=lambda: self.saveedit1(item, column, entryedit, okb, cn, rn))
         okb.grid(column=2, row=0, sticky='W', padx=8, pady=4)
 
     def table2_set_cell_value(self, event):  # 双击进入编辑状态
@@ -136,28 +135,31 @@ class GUI_Table:
         entryedit.destroy()
         okb.destroy()
 
-    def click_bar_button(self):
-        GUI_Func.clean_file(base_path)
-        save_path = base_path + '/%s.png' % self.barChosen.get()
-        Image.bar(self.barChosen.get(), title=self.barChosen.get(), save_path=save_path)
-        img1 = ImgTK.PhotoImage(IMG.open(save_path))
-        barLabel.config(image=img1)
-
 
     def gui_bar(self):
-        GUI_Func.ensure_path(base_path)
-        self.barChosen.set(TableName.table1.value)
-        barImageChosen.config(width=30, textvariable=self.barChosen)
-        barImageChosen['values'] = (TableName.table1.value,
-                                    TableName.table2.value,
-                                    TableName.table3.value)
+        barImageChosen.config(width=40, textvariable=self.barChosen)
 
-        barImageButton.config(text='OK', command=self.click_bar_button)
+        imglist = ImageName.imglist.value
+        barImageChosen['values'] = imglist
+        self.barChosen.set(imglist[0])
+
+        barImageButton.config(text='OK', command=self.init_bar)
+
         self.init_bar()
 
     def init_bar(self):
-        GUI_Func.clean_file(base_path)
-        value1 = self.barChosen.get()
-        save_path = base_path + '/%s.png' % value1
-        Image.bar(value1, title=value1, save_path=save_path)
-        barLabel.config(image=ImgTK.PhotoImage(IMG.open(save_path)))
+        value0 = self.barChosen.get()
+        value1 = value0.split(']')[-1]
+        img_key = str(value0.split(']')[0]).replace('[', '')
+
+        if img_key == ImageName.img_key1.value:
+            img_figure = Image.bar(value1, title=value1)
+        elif img_key == ImageName.img_key2.value:
+            img_figure = Image.pie(value1, title=value1)
+        else:
+            img_figure = None
+
+        self.canvas = FigureCanvasTkAgg(img_figure, bar_frame)
+        self.canvas.draw()
+        # self.canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
+        self.canvas.get_tk_widget().grid(column=0, row=1, sticky='W', padx=4, pady=4, columnspan=2)

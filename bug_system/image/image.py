@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 from common.mysqler import SQL
-from matplotlib.font_manager import FontProperties
 from common.config import Name,Color
+img_width = 4.6
+img_hight = 4.5
+img_dpi = 100
 
 class Data:
     @classmethod
@@ -37,13 +39,14 @@ class Image:
             height = rect.get_height()
             plt.text(rect.get_x() + rect.get_width() / 2 - 0.08, 1.01 * height, '%s' % int(height))
     @classmethod
-    def bar(cls, table, title='bar chart', save_path='bar.png',font_path=''):
+    def bar(cls, table, title='bar chart'):
         """
 
         :param table: 数据表名
         :param title: 柱形图标题
         :return: 返回一张图片
         """
+        f = plt.figure(figsize=(img_width, img_hight), dpi=img_dpi, facecolor="pink", edgecolor='green')
         num_data = Data.get_data(table)
         # print(num_data)
         name_list = ['AND', 'IOS', 'H5', 'SER', 'PRO']
@@ -102,19 +105,14 @@ class Image:
                         align='edge'
                     )
                 )
-        if font_path:
-            zhfont = FontProperties(fname=font_path, size=14)
-            plt.legend(prop=zhfont)
-        else:
-            plt.legend()
 
+        plt.legend()
         plt.title(title)
-        # plt.title(u'饼图示例——统计北京程序员工龄', FontProperties=font)
-        # plt.figure(figsize=[6.0, 4.8])
-        plt.savefig(save_path)
+        return f
 
     @classmethod
-    def pie(cls, table, title='pie chart', save_path='pie.png', font_path=''):
+    def pie(cls, table, title='pie chart'):
+        q = plt.figure(figsize=(img_width, img_hight), dpi=img_dpi, facecolor="pink", edgecolor='green')
         pie_bug_data = Data.get_data(table)
         # print(pie_bug_data)
         pie_label = []
@@ -145,15 +143,10 @@ class Image:
             explode=tuple(pie_indic),  # tuple方法用于将列表转化为元组
             autopct='%1.1f%%'  # 是数字1，不是l
         )
-
-        if font_path:
-            zhfont = FontProperties(fname=font_path, size=14)
-            plt.title(u'饼图示例', FontProperties=zhfont)
-        else:
-            plt.title(title)
-        plt.savefig(save_path)
+        plt.title(title)
+        return q
 
 
 if __name__ == '__main__':
-    Image.bar('submit_bug_of_this_week', title='Submit BUG of This Week', save_path='submit_bug.gif')
+    Image.bar('submit_bug_of_this_week', title='Submit BUG of This Week')
     # Image.pie('submit_bug_of_this_week', title='Submit BUG of This Week', save_name='pie_1.png')
