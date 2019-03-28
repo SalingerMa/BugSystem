@@ -37,7 +37,7 @@ class Image:
             height = rect.get_height()
             plt.text(rect.get_x() + rect.get_width() / 2 - 0.08, 1.01 * height, '%s' % int(height))
     @classmethod
-    def bar(cls, table, title='bar chart', save_name='bar.png',font_path=''):
+    def bar(cls, table, title='bar chart', save_path='bar.png',font_path=''):
         """
 
         :param table: 数据表名
@@ -110,10 +110,11 @@ class Image:
 
         plt.title(title)
         # plt.title(u'饼图示例——统计北京程序员工龄', FontProperties=font)
-        plt.savefig(save_name)
+        # plt.figure(figsize=[6.0, 4.8])
+        plt.savefig(save_path)
 
     @classmethod
-    def pie(cls, table, title='pie chart', save_name='pie.png', font_path=''):
+    def pie(cls, table, title='pie chart', save_path='pie.png', font_path=''):
         pie_bug_data = Data.get_data(table)
         # print(pie_bug_data)
         pie_label = []
@@ -150,10 +151,9 @@ class Image:
             plt.title(u'饼图示例', FontProperties=zhfont)
         else:
             plt.title(title)
-
-        plt.savefig(save_name)
+        plt.savefig(save_path)
 
 
 if __name__ == '__main__':
-    Image.bar('submit_bug_of_this_week', title='Submit BUG of This Week', save_name='submit_bug.png')
+    Image.bar('submit_bug_of_this_week', title='Submit BUG of This Week', save_path='submit_bug.gif')
     # Image.pie('submit_bug_of_this_week', title='Submit BUG of This Week', save_name='pie_1.png')

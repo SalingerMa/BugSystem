@@ -24,7 +24,7 @@ class RGB(Enum):
 
 class TableHead(Enum):
     column = ['BUG', 'AND', 'IOS', 'H5', 'SER', 'PRO', 'ALL']
-    row = ['Bloker', 'Critical', 'Major', 'Minor']
+    row = ['Bloker', 'Critical', 'Major', 'Minor', 'ALL']
 
 
 

@@ -25,7 +25,7 @@ class SQL:
 
     @classmethod
     def update_value(cls, table, key, value, bug):
-        sql = "UPDATE `%s` SET `%s`=%s WHERE `BUG`='%s'" % (table, key, value, bug)
+        sql = "UPDATE `%s` SET `%s`=%s WHERE `BUG`='%s'" % (table, key, int(value), bug)
         cursor.execute(sql)
         db.commit()
         return cursor.fetchall()
@@ -59,5 +59,5 @@ class SQL:
 
 
 if __name__ == '__main__':
-    a = SQL.insert_one('submit_bug_of_this_week', {'KG':2, "MIN": 3}, duplicate_update=True)
+    a = SQL.update_value('submit_bug_of_this_week', 'AND', 10, 'Bloker')
     print(a)

@@ -24,12 +24,9 @@ class Common:
         return columns
 
     @classmethod
-    def update_table_value(cls, table, x, y, value):
-
-        key = TableHead.column.value[y]
-        bug = TableHead.row.value[x]
+    def update_table_value(cls, table, key, bug, value):
         SQL.update_value(table, key, value, bug)
 
 if __name__ == '__main__':
-    a = Common.get_table_data('submit_bug_of_this_week')
+    a = Common.update_table_value('submit_bug_of_this_week', 'AND', 'Bloker', 20)
     print(a)
