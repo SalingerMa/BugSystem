@@ -3,10 +3,9 @@ from gui_tkinter import *
 from gui_tkinter.create_table import Table
 from common.config import TableName, TableHead, ImageName
 from tkinter.ttk import Button
-from tkinter import Text, StringVar
+from tkinter import Text, StringVar, WORD, END
 from gui_tkinter.gui_func import GUI_Func
 import os
-from image.image import Image
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 columns = TableHead.column.value
@@ -17,7 +16,9 @@ class GUI_Table:
         self.t2 = Table(table2)
         self.t3 = Table(table3)
         self.barChosen = StringVar()
+        self.tbChosen = StringVar()
 
+    # table_frame
     def label1(self):
         label1.config(text=TableName.table1.value)
     def label2(self):
@@ -85,60 +86,75 @@ class GUI_Table:
         okb.grid(column=2, row=4, sticky='W', padx=8, pady=4)
 
     def saveedit1(self, item, column, entryedit, okb, cn, rn):
-        if rn == 4 or cn >= 6:
-            return None
-        while True:
-            if rn > 4:
-                rn -= 5
-            else:
-                break
-        value = entryedit.get(0.0, "end")
-        GUI_Func.update_table(TableName.table1.value, rn, cn, int(value))
+        try:
+            if rn == 4 or cn >= 6:
+                return None
+            while True:
+                if rn > 4:
+                    rn -= 5
+                else:
+                    break
+            value = entryedit.get(0.0, "end")
+            GUI_Func.update_table(TableName.table1.value, rn, cn, int(value))
 
-        table1.set(item, column=column, value=value)
+            table1.set(item, column=column, value=value)
 
-        GUI_Func.insert_table_data(self.t1, TableName.table1.value)
-        entryedit.destroy()
-        okb.destroy()
+            GUI_Func.insert_table_data(self.t1, TableName.table1.value)
+            self.init_analyze()
+        except:
+            pass
+        finally:
+            entryedit.destroy()
+            okb.destroy()
 
     def saveedit2(self, item, column, entryedit, okb, cn, rn):
-        if rn == 4 or cn >= 6:
-            return None
-        while True:
-            if rn > 4:
-                rn -= 5
-            else:
-                break
-        value = entryedit.get(0.0, "end")
-        GUI_Func.update_table(TableName.table2.value, rn, cn, int(value))
+        try:
+            if rn == 4 or cn >= 6:
+                return None
+            while True:
+                if rn > 4:
+                    rn -= 5
+                else:
+                    break
+            value = entryedit.get(0.0, "end")
+            GUI_Func.update_table(TableName.table2.value, rn, cn, int(value))
 
-        table2.set(item, column=column, value=value)
+            table2.set(item, column=column, value=value)
 
-        GUI_Func.insert_table_data(self.t2, TableName.table2.value)
-        entryedit.destroy()
-        okb.destroy()
+            GUI_Func.insert_table_data(self.t2, TableName.table2.value)
+            self.init_analyze()
+        except:
+            entryedit.destroy()
+            okb.destroy()
 
     def saveedit3(self, item, column, entryedit, okb, cn, rn):
-        if rn == 4 or cn >= 6:
-            return None
-        while True:
-            if rn > 4:
-                rn -= 5
-            else:
-                break
-        value = entryedit.get(0.0, "end")
-        GUI_Func.update_table(TableName.table3.value, rn, cn, int(value))
+        try:
+            if rn == 4 or cn >= 6:
+                return None
+            while True:
+                if rn > 4:
+                    rn -= 5
+                else:
+                    break
+            value = entryedit.get(0.0, "end")
+            GUI_Func.update_table(TableName.table3.value, rn, cn, int(value))
 
-        table3.set(item, column=column, value=value)
+            table3.set(item, column=column, value=value)
 
-        GUI_Func.insert_table_data(self.t3, TableName.table3.value)
-        entryedit.destroy()
-        okb.destroy()
+            GUI_Func.insert_table_data(self.t3, TableName.table3.value)
+            self.init_analyze()
+        except:
+            entryedit.destroy()
+            okb.destroy()
 
-
+    # bar frame
     def gui_bar(self):
-        barImageChosen.config(width=40, textvariable=self.barChosen)
+        tableChosen.config(width=25, textvariable=self.tbChosen)
+        tablelist = ImageName.tablelist.value
+        tableChosen['values'] = tablelist
+        self.tbChosen.set(tablelist[0])
 
+        barImageChosen.config(width=16, textvariable=self.barChosen)
         imglist = ImageName.imglist.value
         barImageChosen['values'] = imglist
         self.barChosen.set(imglist[0])
@@ -148,18 +164,58 @@ class GUI_Table:
         self.init_bar()
 
     def init_bar(self):
-        value0 = self.barChosen.get()
-        value1 = value0.split(']')[-1]
-        img_key = str(value0.split(']')[0]).replace('[', '')
+        tbvalue = self.tbChosen.get()
+        barvalue = self.barChosen.get()
 
-        if img_key == ImageName.img_key1.value:
-            img_figure = Image.bar(value1, title=value1)
-        elif img_key == ImageName.img_key2.value:
-            img_figure = Image.pie(value1, title=value1)
-        else:
-            img_figure = None
+        barvalue1, barvalue2 = barvalue.split('-')
+        img_figure = GUI_Func.get_image_figure(tbvalue, barvalue1, barvalue2)
 
         self.canvas = FigureCanvasTkAgg(img_figure, bar_frame)
         self.canvas.draw()
         # self.canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
-        self.canvas.get_tk_widget().grid(column=0, row=1, sticky='W', padx=4, pady=4, columnspan=2)
+        self.canvas.get_tk_widget().grid(column=0, row=1, sticky='W', padx=4, pady=4, columnspan=3)
+
+    def copy_table(self):
+        table2_data = GUI_Func.get_table_data(TableName.table2.value)
+        for bug, value in table2_data.items():
+            for i in range(len(value['data'])):
+                row_num = TableHead.row.value.index(bug)
+                GUI_Func.update_table(TableName.table3.value, row_num, i + 1, value['data'][i])
+        GUI_Func.insert_table_data(self.t3, TableName.table2.value)
+        self.init_analyze()
+    def clean_table(self, tableName):
+        for i in range(5):
+            for j in range(6):
+                GUI_Func.update_table(tableName, i, j+1, 0)
+        if tableName == TableName.table1.value:
+            GUI_Func.insert_table_data(self.t1, TableName.table1.value)
+        elif tableName == TableName.table2.value:
+            GUI_Func.insert_table_data(self.t2, TableName.table2.value)
+        self.init_analyze()
+
+    def init_del(self):
+        copyButton.config(text="复制表2到表3", command=self.copy_table)
+        clean1Button.config(text='清空表1', command=lambda: self.clean_table(TableName.table1.value))
+        clean2Button.config(text='清空表2', command=lambda: self.clean_table(TableName.table2.value))
+
+    # analyze_frame
+    def init_analyze(self):
+        anaText.config(width=73, height=6, wrap=WORD)
+        ana_data = GUI_Func.get_analyze_data()
+        self.anaText_clean()
+        anaText.config(state='normal')
+        for data in ana_data:
+            self.anaText_insert(data)
+        anaText.config(state='disabled')
+
+    def anaText_insert(self, text):
+        # anaText.config(state='normal')
+        anaText.insert('end', text + "\n")
+        # anaText.config(state='disabled')
+        anaText.see(END)
+        anaText.update()
+
+    def anaText_clean(self):
+        anaText.config(state='normal')
+        anaText.delete('1.0', 'end')
+        anaText.config(state='disabled')
